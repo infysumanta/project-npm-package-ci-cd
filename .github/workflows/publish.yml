@@ -13,6 +13,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Set env
+        run: echo "GIT_TAG=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_ENV
+      - name: Test
+        run: |
+          echo $GIT_TAG
+          echo ${{ env.GIT_TAG }}
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -29,3 +36,14 @@ jobs:
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          release_name: Release ${{ env.GIT_TAG }}
+          tag_name: ${{ env.GIT_TAG }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
