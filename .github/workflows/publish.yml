@@ -39,29 +39,3 @@ jobs:
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Create Release
-        id: create_release
-        run: |
-          curl --request POST \
-            --url https://api.github.com/repos/${{ github.repository }}/releases \
-            --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-            --header 'Content-Type: application/json' \
-            --data '{
-              "tag_name": "${{ env.GIT_TAG  }}",
-              "name": "${{ env.GIT_TAG  }}",
-              "body": "This is the release description.",
-              "draft": false,
-              "prerelease": false
-            }'
-
-      - name: Release
-        id: create_release_code
-        uses: actions/create-release@v1
-        with:
-          release_name: Release ${{ env.GIT_TAG }}
-          tag_name: ${{ env.GIT_TAG }}
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
