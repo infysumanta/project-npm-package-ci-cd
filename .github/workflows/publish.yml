@@ -22,10 +22,10 @@ jobs:
         id: extract_tag_name
         run: echo "::set-output name=tag_name::${GITHUB_REF#refs/tags/}"
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: 16.x
           registry-url: 'https://registry.npmjs.org/'
 
       - name: Install dependencies
