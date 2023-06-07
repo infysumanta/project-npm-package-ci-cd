@@ -27,20 +27,6 @@ jobs:
       - name: Build
         run: npm run lint && npm run build
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.extract_tag_name.outputs.tag_name }}
-          release_name: ${{ steps.extract_tag_name.outputs.tag_name }}
-          body: |
-            This is the release description.
-            It can include multiple lines of text.
-          draft: false
-          prerelease: false
-
       - name: Publish on NPM
         run: npm publish
         env:
