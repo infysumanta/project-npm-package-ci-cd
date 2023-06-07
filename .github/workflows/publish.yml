@@ -4,12 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
-  create:
-    tags:
-      - 'v*'
 
 jobs:
   publish:
@@ -26,30 +20,8 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-      - name: Generating Build Files
+      - name: Generate Build Files
         run: npm run lint && npm run build
-
-      - name: Determine Version Increment
-        id: determine-increment
-        run: |
-          if [[ ${{ github.ref }} == 'refs/tags/v'* ]]; then
-            echo "::set-output name=increment::minor"
-          elif [[ ${{ github.event_name }} == 'push' ]]; then
-            echo "::set-output name=increment::patch"
-          else
-            echo "::set-output name=increment::major"
-          fi
-
-      - name: Update Package Version
-        run: |
-          npm version ${{ steps.determine-increment.outputs.increment }}
-
-      - name: Commit Version Increment
-        run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git commit -am "Bump version to ${{ steps.determine-increment.outputs.increment }}"
-          git push
 
       - name: Publish Package
         run: npm publish
