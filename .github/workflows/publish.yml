@@ -23,10 +23,6 @@ jobs:
       - name: Generate App Version Name
         run: echo ${{ env.GIT_TAG }}
 
-      - name: Extract Tag Name
-        id: extract_tag_name
-        run: echo "::set-output name=tag_name::${GITHUB_REF#refs/tags/}"
-
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
